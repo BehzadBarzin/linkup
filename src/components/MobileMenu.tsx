@@ -7,7 +7,7 @@ const MobileMenu = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   // ---------------------------------------------------------------------------
   return (
-    <div>
+    <div className="md:hidden">
       {/* Hamburger */}
       <div
         className="flex flex-col gap-[4.5px] cursor-pointer"

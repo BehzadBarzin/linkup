@@ -20,7 +20,7 @@ const Navbar = () => {
         </Link>
       </div>
       {/* Center */}
-      <div className="hidden md:flex w-[50%]">
+      <div className="hidden md:flex w-[50%] items-center justify-between">
         {/* Links */}
         <div className="flex gap-6 text-gray-600">
           {/* Home */}
@@ -47,6 +47,16 @@ const Navbar = () => {
             <Image src="/stories.png" alt="home" width={16} height={16} />
             <span>Stories</span>
           </Link>
+        </div>
+
+        {/* Search */}
+        <div className="hidden xl:flex p-2 bg-slate-100 items-center rounded-xl mx-4">
+          <input
+            type="text"
+            placeholder="search..."
+            className="bg-transparent outline-none"
+          />
+          <Image src="/search.png" alt="" width={14} height={14} />
         </div>
       </div>
       {/* Right */}

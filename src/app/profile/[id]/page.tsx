@@ -17,7 +17,7 @@ export default function Profile() {
       </div>
       {/* Right */}
       <div className="hidden lg:block lg:w-[30%]">
-        <RightSidebar />
+        <RightSidebar userId="test" />
       </div>
     </main>
   );

@@ -6,6 +6,7 @@ import moment from "moment";
 import { User } from "@prisma/client";
 import prisma from "@/utils/db";
 import { auth } from "@clerk/nextjs/server";
+import UserInfoInteraction from "./UserInfoInteraction";
 
 interface IProps {
   user: User;
@@ -129,12 +130,12 @@ const UserInfo: FC<IProps> = async ({ user }) => {
           </div>
         </div>
         {/* Actions */}
-        <button className="bg-teal-500 hover:bg-teal-800 transition-all text-white p-2 text-sm rounded-lg">
-          Follow
-        </button>
-        <span className="text-red-500 self-end text-xs cursor-pointer">
-          Block User
-        </span>
+        <UserInfoInteraction
+          userId={user.id}
+          isUserBlocked={isUserBlocked}
+          isFollowing={isFollowing}
+          isFollowingSent={isFollowingSent}
+        />
       </div>
     </Card>
   );

@@ -3,12 +3,28 @@ import Card from "../Card";
 import Link from "next/link";
 import Image from "next/image";
 import { User } from "@prisma/client";
+import prisma from "@/utils/db";
 
 interface IProps {
   user: User;
 }
 
-const UserMedia: FC<IProps> = ({ user }) => {
+const UserMedia: FC<IProps> = async ({ user }) => {
+  // ---------------------------------------------------------------------------
+  // Get the user's posts that have media
+  const postsWithMedia = await prisma.post.findMany({
+    where: {
+      userId: user.id,
+      img: {
+        not: null,
+      },
+    },
+    take: 8,
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  // ---------------------------------------------------------------------------
   return (
     <Card className="flex flex-col gap-4">
       {/* Top */}
@@ -20,19 +36,22 @@ const UserMedia: FC<IProps> = ({ user }) => {
       </div>
       {/* Content */}
       <div className="flex gap-4 justify-between flex-wrap">
-        {Array(8)
-          .join()
-          .split(",")
-          .map((_, i) => (
+        {postsWithMedia.length ? (
+          postsWithMedia.map((post, i) => (
             <div className="relative w-1/5 h-24" key={i}>
               <Image
-                src="/sample-post.jpg"
+                src={post.img!}
                 alt=""
                 fill
                 className="rounded-md object-cover"
               />
             </div>
-          ))}
+          ))
+        ) : (
+          <p className="italic text-center w-full text-gray-500">
+            No Media Found
+          </p>
+        )}
       </div>
     </Card>
   );

@@ -130,12 +130,15 @@ const UserInfo: FC<IProps> = async ({ user }) => {
           </div>
         </div>
         {/* Actions */}
-        <UserInfoInteraction
-          userId={user.id}
-          isUserBlocked={isUserBlocked}
-          isFollowing={isFollowing}
-          isFollowingSent={isFollowingSent}
-        />
+        {/* If currently authenticated user is NOT the same as the current profile's user */}
+        {currentUserId !== user.id && (
+          <UserInfoInteraction
+            userId={user.id}
+            isUserBlocked={isUserBlocked}
+            isFollowing={isFollowing}
+            isFollowingSent={isFollowingSent}
+          />
+        )}
       </div>
     </Card>
   );

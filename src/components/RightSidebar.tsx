@@ -4,22 +4,23 @@ import Adverts from "./Adverts";
 import Birthdays from "./Birthdays";
 import UserInfo from "./UserInfo";
 import UserMedia from "./UserMedia";
+import { User } from "@prisma/client";
 
 // If we're in the user profile, this userId would have value
 interface IProps {
-  userId?: string;
+  user?: User;
 }
 
-const RightSidebar: FC<IProps> = ({ userId }) => {
+const RightSidebar: FC<IProps> = ({ user }) => {
   return (
     <div className="flex flex-col gap-6">
       {/* Only Display UserInfo and UserMedia if we're in the user profile */}
-      {userId && (
+      {user && (
         <>
           {/* UserInfo */}
-          <UserInfo userId={userId} />
+          <UserInfo user={user} />
           {/* UserMedia */}
-          <UserMedia userId={userId} />
+          <UserMedia user={user} />
         </>
       )}
       {/* Friend Requests */}

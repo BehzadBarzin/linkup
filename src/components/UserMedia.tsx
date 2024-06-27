@@ -2,12 +2,13 @@ import React, { FC } from "react";
 import Card from "./Card";
 import Link from "next/link";
 import Image from "next/image";
+import { User } from "@prisma/client";
 
 interface IProps {
-  userId: string;
+  user: User;
 }
 
-const UserMedia: FC<IProps> = ({ userId }) => {
+const UserMedia: FC<IProps> = ({ user }) => {
   return (
     <Card className="flex flex-col gap-4">
       {/* Top */}

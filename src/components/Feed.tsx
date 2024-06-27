@@ -1,9 +1,10 @@
 import React from "react";
 import Post from "./Post";
+import Card from "./Card";
 
 const Feed = () => {
   return (
-    <div className="p-4 bg-white rounded-lg shadow-md flex flex-col gap-12">
+    <Card className="flex flex-col gap-12">
       <Post />
       <Post />
       <Post />
@@ -15,7 +16,7 @@ const Feed = () => {
       <Post />
       <Post />
       <Post />
-    </div>
+    </Card>
   );
 };
 

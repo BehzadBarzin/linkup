@@ -1,9 +1,10 @@
 import Image from "next/image";
 import React from "react";
+import Card from "./Card";
 
 const AddPost = () => {
   return (
-    <div className="p-4 bg-white rounded-lg shadow-md flex gap-4 justify-between text-sm">
+    <Card className="flex gap-4 justify-between">
       {/* Avatar */}
       <Image
         src="/sample-avatar.jpg"
@@ -54,7 +55,7 @@ const AddPost = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Card>
   );
 };
 

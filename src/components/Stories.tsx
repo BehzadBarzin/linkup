@@ -1,9 +1,10 @@
 import Image from "next/image";
 import React from "react";
+import Card from "./Card";
 
 const Stories = () => {
   return (
-    <div className="p-4 bg-white rounded-lg shadow-md overflow-x-scroll text-sm no-scrollbar">
+    <Card className="overflow-x-scroll no-scrollbar">
       {/* Stories Container */}
       <div className="flex gap-8 w-max">
         {/* Single Story */}
@@ -26,7 +27,7 @@ const Stories = () => {
             </div>
           ))}
       </div>
-    </div>
+    </Card>
   );
 };
 

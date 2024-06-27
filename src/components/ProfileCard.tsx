@@ -20,7 +20,7 @@ const ProfileCard = () => {
           alt=""
           width={48}
           height={48}
-          className="rounded-full w-12 h-12 object-cover absolute left-0 right-0 m-auto -bottom-6 ring-1 ring-white z-10"
+          className="rounded-full w-12 h-12 object-cover absolute left-0 right-0 m-auto -bottom-6 ring-2 ring-teal-500 z-10"
         />
       </div>
       {/* Info */}

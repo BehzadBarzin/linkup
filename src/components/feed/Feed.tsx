@@ -1,6 +1,6 @@
 import React from "react";
 import Post from "./Post";
-import Card from "./Card";
+import Card from "../Card";
 
 const Feed = () => {
   return (

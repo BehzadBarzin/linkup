@@ -1,8 +1,8 @@
 import { FC } from "react";
 import Image from "next/image";
-import Feed from "@/components/Feed";
-import LeftSidebar from "@/components/LeftSidebar";
-import RightSidebar from "@/components/RightSidebar";
+import Feed from "@/components/feed/Feed";
+import LeftSidebar from "@/components/left-bar/LeftSidebar";
+import RightSidebar from "@/components/right-bar/RightSidebar";
 import prisma from "@/utils/db";
 import { notFound } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";

@@ -1,7 +1,7 @@
 import AddPost from "@/components/AddPost";
-import Feed from "@/components/Feed";
-import LeftSidebar from "@/components/LeftSidebar";
-import RightSidebar from "@/components/RightSidebar";
+import Feed from "@/components/feed/Feed";
+import LeftSidebar from "@/components/left-bar/LeftSidebar";
+import RightSidebar from "@/components/right-bar/RightSidebar";
 import Stories from "@/components/Stories";
 
 export default function Home() {

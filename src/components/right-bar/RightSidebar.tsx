@@ -1,11 +1,11 @@
 import React, { FC, Suspense } from "react";
 import FriendRequests from "./FriendRequests";
-import Adverts from "./Adverts";
+import Adverts from "../Adverts";
 import Birthdays from "./Birthdays";
 import UserInfo from "./UserInfo";
 import UserMedia from "./UserMedia";
 import { User } from "@prisma/client";
-import Spinner from "./Spinner";
+import Spinner from "../Spinner";
 
 // If we're in the user profile, this userId would have value
 interface IProps {

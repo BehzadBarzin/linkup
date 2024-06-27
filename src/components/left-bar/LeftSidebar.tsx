@@ -1,10 +1,10 @@
 import React, { FC } from "react";
 import ProfileCard from "./ProfileCard";
-import Card from "./Card";
+import Card from "../Card";
 import Link from "next/link";
 import Image from "next/image";
 import { leftSidebarLinks } from "@/constants";
-import Adverts from "./Adverts";
+import Adverts from "../Adverts";
 
 // If we're in the user profile, won't show user profile card
 interface IProps {

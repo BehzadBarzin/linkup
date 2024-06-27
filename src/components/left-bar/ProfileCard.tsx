@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import Card from "./Card";
+import Card from "../Card";
 import Image from "next/image";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/utils/db";

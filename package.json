@@ -12,6 +12,7 @@
     "@clerk/nextjs": "^5.1.6",
     "babel-plugin-react-compiler": "0.0.0-experimental-696af53-20240625",
     "clsx": "^2.1.1",
+    "moment": "^2.30.1",
     "next": "15.0.0-rc.0",
     "react": "19.0.0-rc-8971381549-20240625",
     "react-dom": "19.0.0-rc-8971381549-20240625",

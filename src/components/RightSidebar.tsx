@@ -1,10 +1,11 @@
-import React, { FC } from "react";
+import React, { FC, Suspense } from "react";
 import FriendRequests from "./FriendRequests";
 import Adverts from "./Adverts";
 import Birthdays from "./Birthdays";
 import UserInfo from "./UserInfo";
 import UserMedia from "./UserMedia";
 import { User } from "@prisma/client";
+import Spinner from "./Spinner";
 
 // If we're in the user profile, this userId would have value
 interface IProps {
@@ -18,9 +19,13 @@ const RightSidebar: FC<IProps> = ({ user }) => {
       {user && (
         <>
           {/* UserInfo */}
-          <UserInfo user={user} />
-          {/* UserMedia */}
-          <UserMedia user={user} />
+          <Suspense fallback={<Spinner />}>
+            <UserInfo user={user} />
+          </Suspense>
+          <Suspense fallback={<Spinner />}>
+            {/* UserMedia */}
+            <UserMedia user={user} />{" "}
+          </Suspense>
         </>
       )}
       {/* Friend Requests */}

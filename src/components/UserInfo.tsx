@@ -4,12 +4,47 @@ import Link from "next/link";
 import Image from "next/image";
 import moment from "moment";
 import { User } from "@prisma/client";
+import prisma from "@/utils/db";
+import { auth } from "@clerk/nextjs/server";
 
 interface IProps {
   user: User;
 }
 
-const UserInfo: FC<IProps> = ({ user }) => {
+const UserInfo: FC<IProps> = async ({ user }) => {
+  // ---------------------------------------------------------------------------
+  let isUserBlocked = false;
+  let isFollowing = false;
+  let isFollowingSent = false;
+
+  const { userId: currentUserId } = auth();
+
+  if (currentUserId) {
+    const blockRes = await prisma.block.findFirst({
+      where: {
+        blockerId: currentUserId,
+        blockedId: user.id,
+      },
+    });
+    isUserBlocked = !!blockRes;
+
+    const followRes = await prisma.follower.findFirst({
+      where: {
+        followerId: currentUserId,
+        followingId: user.id,
+      },
+    });
+    isFollowing = !!followRes;
+
+    const followReqRes = await prisma.followRequest.findFirst({
+      where: {
+        senderId: currentUserId,
+        receiverId: user.id,
+      },
+    });
+    isFollowingSent = !!followReqRes;
+  }
+  // ---------------------------------------------------------------------------
   return (
     <Card className="flex flex-col gap-4">
       {/* Top */}

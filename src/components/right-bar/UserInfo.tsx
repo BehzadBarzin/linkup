@@ -7,6 +7,7 @@ import { User } from "@prisma/client";
 import prisma from "@/utils/db";
 import { auth } from "@clerk/nextjs/server";
 import UserInfoInteraction from "./UserInfoInteraction";
+import UpdateUser from "./UpdateUser";
 
 interface IProps {
   user: User;
@@ -51,9 +52,14 @@ const UserInfo: FC<IProps> = async ({ user }) => {
       {/* Top */}
       <div className="flex justify-between items-center font-medium">
         <span className="text-gray-500">User Information</span>
-        <Link href={"/"} className="text-teal-700 text-xs hover:underline">
-          See All
-        </Link>
+        {/* If authenticated user is visiting this, show update, otherwise see all */}
+        {currentUserId === user.id ? (
+          <UpdateUser user={user} />
+        ) : (
+          <Link href={"/"} className="text-teal-700 text-xs hover:underline">
+            See All
+          </Link>
+        )}
       </div>
       {/* Content */}
       <div className="flex flex-col gap-4 text-gray-500">

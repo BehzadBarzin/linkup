@@ -115,3 +115,89 @@ export const switchBlock = async (userId: string) => {
 };
 
 // =============================================================================
+/**
+ * Accept target user's friend request.
+ *
+ * @param userId Target user (request sender)
+ */
+export const acceptFollowRequest = async (userId: string) => {
+  // ---------------------------------------------------------------------------
+  // Get authenticated user's id from Clerk
+  const { userId: currentUserId } = auth();
+
+  if (!currentUserId) {
+    throw new Error("User is not Authenticated!!");
+  }
+  // ---------------------------------------------------------------------------
+  // Update DB
+  try {
+    // Find follow request in DB
+    const existingFollowRequest = await prisma.followRequest.findFirst({
+      where: {
+        senderId: userId,
+        receiverId: currentUserId,
+      },
+    });
+
+    // If follow request is found
+    if (existingFollowRequest) {
+      // Delete the request
+      await prisma.followRequest.delete({
+        where: {
+          id: existingFollowRequest.id,
+        },
+      });
+
+      // Add target user (sender) to current user's followers
+      await prisma.follower.create({
+        data: {
+          followerId: userId,
+          followingId: currentUserId,
+        },
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    throw new Error("Something went wrong!");
+  }
+};
+
+// =============================================================================
+/**
+ * Decline target user's friend request.
+ *
+ * @param userId Target user (request sender)
+ */
+export const declineFollowRequest = async (userId: string) => {
+  // ---------------------------------------------------------------------------
+  // Get authenticated user's id from Clerk
+  const { userId: currentUserId } = auth();
+
+  if (!currentUserId) {
+    throw new Error("User is not Authenticated!!");
+  }
+  // ---------------------------------------------------------------------------
+  // Update DB
+  try {
+    // Find follow request in DB
+    const existingFollowRequest = await prisma.followRequest.findFirst({
+      where: {
+        senderId: userId,
+        receiverId: currentUserId,
+      },
+    });
+    // If follow request is found
+    if (existingFollowRequest) {
+      // Delete the follow request
+      await prisma.followRequest.delete({
+        where: {
+          id: existingFollowRequest.id,
+        },
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    throw new Error("Something went wrong!");
+  }
+};
+// =============================================================================

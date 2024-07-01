@@ -2,8 +2,28 @@ import React from "react";
 import Card from "../Card";
 import Link from "next/link";
 import Image from "next/image";
+import { auth } from "@clerk/nextjs/server";
+import prisma from "@/utils/db";
+import FriendRequestList from "./FriendRequestList";
 
-const FriendRequests = () => {
+const FriendRequests = async () => {
+  // ---------------------------------------------------------------------------
+  // Get Authenticated user's id from Clerk
+  const { userId } = auth();
+  if (!userId) return null;
+  // ---------------------------------------------------------------------------
+  // Fetch friend requests for this user from DB
+  const requests = await prisma.followRequest.findMany({
+    where: {
+      receiverId: userId,
+    },
+    include: {
+      sender: true,
+    },
+  });
+
+  // if (!requests.length) return null;
+  // ---------------------------------------------------------------------------
   return (
     <Card className="flex flex-col gap-4">
       {/* Top */}
@@ -15,41 +35,7 @@ const FriendRequests = () => {
       </div>
       {/* Requests */}
       <div className="flex flex-col gap-4">
-        {Array(3)
-          .join()
-          .split(",")
-          .map((_, i) => (
-            <div key={i} className="flex items-center justify-between">
-              {/* User */}
-              <div className="flex items-center gap-4">
-                <Image
-                  src="/sample-avatar.jpg"
-                  alt=""
-                  width={40}
-                  height={40}
-                  className="w-10 h-10 rounded-full object-cover"
-                />
-                <span className="font-semibold ">John Doe</span>
-              </div>
-              {/* Actions */}
-              <div className="flex justify-end gap-3">
-                <Image
-                  src="/accept.png"
-                  alt=""
-                  width={20}
-                  height={20}
-                  className="cursor-pointer"
-                />
-                <Image
-                  src="/reject.png"
-                  alt=""
-                  width={20}
-                  height={20}
-                  className="cursor-pointer"
-                />
-              </div>
-            </div>
-          ))}
+        <FriendRequestList requests={requests} />
       </div>
     </Card>
   );

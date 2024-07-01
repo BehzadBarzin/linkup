@@ -2,6 +2,7 @@
 
 import { auth } from "@clerk/nextjs/server";
 import prisma from "../utils/db";
+import { z } from "zod";
 
 // =============================================================================
 /**
@@ -200,4 +201,69 @@ export const declineFollowRequest = async (userId: string) => {
     throw new Error("Something went wrong!");
   }
 };
+// =============================================================================
+/**
+ * Update user info.
+ *
+ * @param prevState
+ * @param payload
+ * @returns
+ */
+export const updateProfile = async (
+  prevState: { success: boolean; error: boolean },
+  payload: { formData: FormData; cover: string }
+) => {
+  // ---------------------------------------------------------------------------
+  const { formData, cover } = payload;
+  const fields = Object.fromEntries(formData);
+
+  const filteredFields = Object.fromEntries(
+    Object.entries(fields).filter(([_, value]) => value !== "")
+  );
+  // ---------------------------------------------------------------------------
+  // Validate payload
+  const Profile = z.object({
+    cover: z.string().optional(),
+    name: z.string().max(60).optional(),
+    surname: z.string().max(60).optional(),
+    description: z.string().max(255).optional(),
+    city: z.string().max(60).optional(),
+    school: z.string().max(60).optional(),
+    work: z.string().max(60).optional(),
+    website: z.string().max(60).optional(),
+  });
+
+  const validatedFields = Profile.safeParse({ cover, ...filteredFields });
+
+  if (!validatedFields.success) {
+    console.log(validatedFields.error.flatten().fieldErrors);
+    // Return action state
+    return { success: false, error: true };
+  }
+  // ---------------------------------------------------------------------------
+  // Get currently authenticated user
+  const { userId } = auth();
+
+  if (!userId) {
+    return { success: false, error: true };
+  }
+
+  // ---------------------------------------------------------------------------
+  // Update DB
+  try {
+    await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: validatedFields.data,
+    });
+    // Return action state
+    return { success: true, error: false };
+  } catch (err) {
+    console.log(err);
+    // Return action state
+    return { success: false, error: true };
+  }
+};
+
 // =============================================================================

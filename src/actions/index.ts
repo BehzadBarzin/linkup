@@ -267,3 +267,48 @@ export const updateProfile = async (
 };
 
 // =============================================================================
+/**
+ * Like/Unlike a post.
+ *
+ * @param postId target post
+ */
+export const switchLike = async (postId: number) => {
+  // ---------------------------------------------------------------------------
+  // Get the currently authenticated user
+  const { userId } = auth();
+
+  if (!userId) throw new Error("User is not authenticated!");
+  // ---------------------------------------------------------------------------
+  // Update DB
+  try {
+    // Find the like if it exists in DB
+    const existingLike = await prisma.like.findFirst({
+      where: {
+        postId,
+        userId,
+      },
+    });
+
+    if (existingLike) {
+      // UNLIKE: If like exists in DB, remove it
+      await prisma.like.delete({
+        where: {
+          id: existingLike.id,
+        },
+      });
+    } else {
+      // LIKE: If like doesn't exist in DB, create it
+      await prisma.like.create({
+        data: {
+          postId,
+          userId,
+        },
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    throw new Error("Something went wrong");
+  }
+};
+
+// =============================================================================

@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Comments from "./Comments";
-import { FC } from "react";
+import { FC, Suspense } from "react";
 import { Post as PostType, User } from "@prisma/client";
 import { auth } from "@clerk/nextjs/server";
+import PostInteraction from "./PostInteraction";
 
 export type FeedPostType = PostType & { user: User } & {
   likes: { userId: string }[];
@@ -65,56 +66,13 @@ const Post: FC<IProps> = ({ post }) => {
         <p>{post.desc}</p>
       </div>
       {/* Interaction */}
-      <div className="flex items-center justify-between text-sm my-4">
-        {/* Left */}
-        <div className="flex gap-8">
-          {/* Likes */}
-          <div className="flex items-center gap-4 bg-slate-100 p-2 rounded-xl">
-            <Image
-              src="/like.png"
-              alt=""
-              width={16}
-              height={16}
-              className="cursor-pointer"
-            />
-            <span className="text-gray-300">|</span>
-            <span className="text-gray-500">
-              657 <span className="hidden md:inline">&nbsp;Likes</span>
-            </span>
-          </div>
-          {/* Comments */}
-          <div className="flex items-center gap-4 bg-slate-100 p-2 rounded-xl">
-            <Image
-              src="/comment.png"
-              alt=""
-              width={16}
-              height={16}
-              className="cursor-pointer"
-            />
-            <span className="text-gray-300">|</span>
-            <span className="text-gray-500">
-              178 <span className="hidden md:inline">&nbsp;Comments</span>
-            </span>
-          </div>
-        </div>
-        {/* Right */}
-        <div className="">
-          {/* Share */}
-          <div className="flex items-center gap-4 bg-slate-100 p-2 rounded-xl">
-            <Image
-              src="/share.png"
-              alt=""
-              width={16}
-              height={16}
-              className="cursor-pointer"
-            />
-            <span className="text-gray-300">|</span>
-            <span className="text-gray-500">
-              <span className="hidden md:inline">Share</span>
-            </span>
-          </div>
-        </div>
-      </div>
+      <Suspense fallback="Loading...">
+        <PostInteraction
+          postId={post.id}
+          likes={post.likes.map((like) => like.userId)}
+          commentCount={post._count.comments}
+        />
+      </Suspense>
 
       {/* Comments */}
       <Comments />

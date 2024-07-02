@@ -385,3 +385,53 @@ export const addPost = async (formData: FormData, img: string) => {
 };
 
 // =============================================================================
+/**
+ * Add a new story.
+ *
+ * @param img story's image
+ * @returns
+ */
+export const addStory = async (img: string) => {
+  // ---------------------------------------------------------------------------
+  // Get currently authenticated user
+  const { userId } = auth();
+
+  if (!userId) throw new Error("User is not authenticated!");
+  // ---------------------------------------------------------------------------
+  // Update DB (user can only have 1 story)
+  try {
+    // Find existing story for the user
+    const existingStory = await prisma.story.findFirst({
+      where: {
+        userId,
+      },
+    });
+
+    // If story exists, remove it
+    if (existingStory) {
+      await prisma.story.delete({
+        where: {
+          id: existingStory.id,
+        },
+      });
+    }
+
+    // Create a new story
+    const createdStory = await prisma.story.create({
+      data: {
+        userId,
+        img,
+        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      },
+      include: {
+        user: true,
+      },
+    });
+
+    // Return created story
+    return createdStory;
+  } catch (err) {
+    console.log(err);
+  }
+};
+// =============================================================================

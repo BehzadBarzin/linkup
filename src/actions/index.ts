@@ -312,3 +312,38 @@ export const switchLike = async (postId: number) => {
 };
 
 // =============================================================================
+/**
+ * Add a comment on a post.
+ *
+ * @param postId target post
+ * @param desc comment body
+ * @returns
+ */
+export const addComment = async (postId: number, desc: string) => {
+  // ---------------------------------------------------------------------------
+  // Get currently authenticated user
+  const { userId } = auth();
+
+  if (!userId) throw new Error("User is not authenticated!");
+  // ---------------------------------------------------------------------------
+  // Update DB
+  try {
+    const createdComment = await prisma.comment.create({
+      data: {
+        desc,
+        userId,
+        postId,
+      },
+      include: {
+        user: true,
+      },
+    });
+
+    return createdComment;
+  } catch (err) {
+    console.log(err);
+    throw new Error("Something went wrong!");
+  }
+};
+
+// =============================================================================

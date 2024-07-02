@@ -75,7 +75,9 @@ const Post: FC<IProps> = ({ post }) => {
       </Suspense>
 
       {/* Comments */}
-      <Comments />
+      <Suspense fallback="Loading...">
+        <Comments postId={post.id} />
+      </Suspense>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { FC, Suspense } from "react";
 import { Post as PostType, User } from "@prisma/client";
 import { auth } from "@clerk/nextjs/server";
 import PostInteraction from "./PostInteraction";
+import PostInfo from "./PostInfo";
 
 export type FeedPostType = PostType & { user: User } & {
   likes: { userId: string }[];
@@ -41,13 +42,8 @@ const Post: FC<IProps> = ({ post }) => {
           </span>
         </div>
         {/* More... */}
-        <Image
-          src="/more.png"
-          alt=""
-          width={16}
-          height={16}
-          className="cursor-pointer"
-        />
+        {/* Only display if current user is the owner */}
+        {userId === post.user.id && <PostInfo postId={post.id} />}
       </div>
       {/* Description */}
       <div className="flex flex-col gap-4">

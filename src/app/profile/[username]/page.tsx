@@ -100,8 +100,9 @@ const Profile: FC<IProps> = async ({ params }) => {
               </div>
             </div>
           </div>
+
           {/* Feed */}
-          <Feed />
+          <Feed username={user.username} />
         </div>
       </div>
       {/* Right */}

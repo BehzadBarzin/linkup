@@ -1,7 +1,24 @@
 import Image from "next/image";
 import Comments from "./Comments";
+import { FC } from "react";
+import { Post as PostType, User } from "@prisma/client";
+import { auth } from "@clerk/nextjs/server";
 
-const Post = () => {
+export type FeedPostType = PostType & { user: User } & {
+  likes: { userId: string }[];
+} & {
+  _count: { comments: number };
+};
+
+interface IProps {
+  post: FeedPostType;
+}
+
+const Post: FC<IProps> = ({ post }) => {
+  // ---------------------------------------------------------------------------
+  // Get currently authenticated user's id
+  const { userId } = auth();
+  // ---------------------------------------------------------------------------
   return (
     <div className="flex flex-col gap-4 ">
       {/* User */}
@@ -9,14 +26,18 @@ const Post = () => {
         <div className="flex items-center gap-4">
           {/* Avatar */}
           <Image
-            src="/sample-avatar.jpg"
+            src={post.user.avatar || "/sample-avatar.jpg"}
             alt=""
             width={40}
             height={40}
             className="w-10 h-10 object-cover rounded-full"
           />
           {/* Username */}
-          <span className="font-medium">John Doe</span>
+          <span className="font-medium">
+            {post.user.name && post.user.surname
+              ? post.user.name + " " + post.user.surname
+              : post.user.username}
+          </span>
         </div>
         {/* More... */}
         <Image
@@ -30,24 +51,18 @@ const Post = () => {
       {/* Description */}
       <div className="flex flex-col gap-4">
         {/* Post Image */}
-        <div className="w-full min-h-96 relative">
-          <Image
-            src="/sample-post.jpg"
-            alt=""
-            fill
-            className="object-cover rounded-md"
-          />
-        </div>
+        {post.img && (
+          <div className="w-full min-h-96 relative">
+            <Image
+              src={post.img}
+              fill
+              className="object-cover rounded-md"
+              alt=""
+            />
+          </div>
+        )}
         {/* Post Text */}
-        <p>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Modi sit
-          recusandae rem provident sint. Assumenda neque explicabo recusandae
-          itaque repellendus, praesentium natus soluta voluptatem laboriosam,
-          ratione numquam omnis. Similique odio necessitatibus voluptatum
-          repellendus nemo, animi quisquam provident et, veritatis sequi ullam
-          aperiam maxime? Expedita in repudiandae harum dolor. Dolor,
-          exercitationem.
-        </p>
+        <p>{post.desc}</p>
       </div>
       {/* Interaction */}
       <div className="flex items-center justify-between text-sm my-4">
@@ -95,7 +110,7 @@ const Post = () => {
             />
             <span className="text-gray-300">|</span>
             <span className="text-gray-500">
-              48 <span className="hidden md:inline">&nbsp;Shares</span>
+              <span className="hidden md:inline">Share</span>
             </span>
           </div>
         </div>
